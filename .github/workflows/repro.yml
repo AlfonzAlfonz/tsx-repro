@@ -1,0 +1,15 @@
+name: repro
+on: [push, workflow_dispatch]
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - name: tsx as published (lines 3-4 reported as covered)
+        run: npm run coverage
+      - name: tsx with minifyWhitespace disabled (lines 3-4 reported as uncovered)
+        run: npm run coverage:no-minify
